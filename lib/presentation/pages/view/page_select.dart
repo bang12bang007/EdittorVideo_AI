@@ -152,7 +152,7 @@ class _SelectPageState extends State<SelectPage>
       floatingActionButton: FloatingActionButton(
         onPressed: _pickMedia,
         backgroundColor: UtilColors.primaryColor,
-        child: Icon(Icons.add_photo_alternate),
+        child: const Icon(Icons.add_photo_alternate),
       ),
       bottomNavigationBar: Container(
         height: 80,
@@ -174,47 +174,49 @@ class _SelectPageState extends State<SelectPage>
               ),
             ),
             SizedBox(
-                width: 90,
-                height: 30,
-                child: UtilButton(
-                    text: "use",
-                    onPressed: selectedForEdit.isEmpty
-                        ? null
-                        : () async {
-                            File file = File(selectedForEdit.first.path);
-                            if (isPhotoTab) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ImagePreviewPage(file: file),
-                                ),
-                              );
-                            } else {
-                              final playerController =
-                                  VideoPlayerController.file(file);
-                              await playerController.initialize();
-                              final editorController =
-                                  VideoEditorController.file(
-                                file,
-                                minDuration: const Duration(seconds: 1),
-                                maxDuration: const Duration(minutes: 10),
-                              );
-                              final timeline = await generateTimeLine(file, 10);
-                              if (!mounted) return;
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => VideoPreviewPage(
-                                    file: file,
-                                    editorController: editorController,
-                                    playerController: playerController,
-                                    timeline: timeline,
-                                  ),
-                                ),
-                              );
-                            }
-                          })),
+              width: 90,
+              height: 30,
+              child: UtilButton(
+                text: "use",
+                onPressed: () async {
+                  if (isPhotoTab) {
+                    if (selectedPhotosForEdit.isEmpty) return;
+                    File filephoto = File(selectedPhotosForEdit.first.path);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImagePreviewPage(file: filephoto),
+                      ),
+                    );
+                  } else {
+                    if (selectedVideosForEdit.isEmpty) return;
+                    File filevideo = File(selectedVideosForEdit.first.path);
+                    final playerController =
+                        VideoPlayerController.file(filevideo);
+                    await playerController.initialize();
+                    final editorController = VideoEditorController.file(
+                      filevideo,
+                      minDuration: const Duration(seconds: 1),
+                      maxDuration: const Duration(minutes: 10),
+                    );
+                    final timeline = await generateTimeLine(filevideo, 10);
+                    if (!mounted) return;
+                    Navigator.push(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VideoPreviewPage(
+                          file: filevideo,
+                          editorController: editorController,
+                          playerController: playerController,
+                          timeline: timeline,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -249,10 +251,10 @@ class _SelectPageState extends State<SelectPage>
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    if (selectedForEdit.contains(media)) {
-                      selectedForEdit.remove(media);
+                    if (selectedPhotosForEdit.contains(media)) {
+                      selectedPhotosForEdit.remove(media);
                     } else {
-                      selectedForEdit.add(media);
+                      selectedPhotosForEdit.add(media);
                     }
                   });
                 },
@@ -260,12 +262,12 @@ class _SelectPageState extends State<SelectPage>
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: selectedForEdit.contains(media)
+                    color: selectedPhotosForEdit.contains(media)
                         ? Colors.green
                         : Colors.grey,
                   ),
                   child: Icon(
-                    selectedForEdit.contains(media)
+                    selectedPhotosForEdit.contains(media)
                         ? Icons.check
                         : Icons.circle_outlined,
                     color: Colors.white,
@@ -327,10 +329,10 @@ class _SelectPageState extends State<SelectPage>
                     child: GestureDetector(
                       onTap: () {
                         setState(() {
-                          if (selectedForEdit.contains(media)) {
-                            selectedForEdit.remove(media);
+                          if (selectedVideosForEdit.contains(media)) {
+                            selectedVideosForEdit.remove(media);
                           } else {
-                            selectedForEdit.add(media);
+                            selectedVideosForEdit.add(media);
                           }
                         });
                       },
@@ -338,12 +340,12 @@ class _SelectPageState extends State<SelectPage>
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: selectedForEdit.contains(media)
+                          color: selectedVideosForEdit.contains(media)
                               ? Colors.green
                               : Colors.grey,
                         ),
                         child: Icon(
-                          selectedForEdit.contains(media)
+                          selectedVideosForEdit.contains(media)
                               ? Icons.check
                               : Icons.circle_outlined,
                           color: Colors.white,

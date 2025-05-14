@@ -47,6 +47,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   camera: ^0.11.0+2
   video_thumbnail: ^0.5.3
+  lottie: ^2.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,6 +76,7 @@ flutter:
     - lib/assets/fonts/
     - lib/assets/imgs/
     - lib/assets/svg/
+    - lib/assets/lottie/loading.json
     - lib/presentation/pages/music/songs.js
   fonts:
     - family: OpenSans

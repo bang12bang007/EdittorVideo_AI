@@ -3,6 +3,7 @@ import 'package:edit_video_app/presentation/pages/service/service_flashAPI.dart'
     show restoreImage;
 import 'package:flutter/material.dart';
 import 'package:edit_video_app/assets/colors.dart';
+import 'package:lottie/lottie.dart';
 
 class ImagePreviewPage extends StatefulWidget {
   final File file;
@@ -62,57 +63,60 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
               }),
         ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Image.file(
-              file,
-              fit: BoxFit.contain,
-            ),
-            Row(
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
               children: [
-                IconButton(
-                  icon: Icon(Icons.face),
-                  onPressed: isRestored || isLoading
-                      ? null
-                      : () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          File? restoredImage = await restoreImage(widget.file);
-                          if (restoredImage != null) {
-                            setState(() {
-                              file = restoredImage;
-                              isRestored = true;
-                            });
-                          }
-                          setState(() {
-                            isLoading = false;
-                          });
-                        },
+                Image.file(
+                  file,
+                  fit: BoxFit.contain,
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.face),
+                      onPressed: isRestored || isLoading
+                          ? null
+                          : () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              File? restoredImage =
+                                  await restoreImage(widget.file);
+                              if (restoredImage != null) {
+                                setState(() {
+                                  file = restoredImage;
+                                  isRestored = true;
+                                });
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                    ),
+                  ],
                 ),
               ],
             ),
-            if (isLoading) ...[
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                "Restoring ...",
-                style: TextStyle(
-                  color: colorEdittor,
-                  fontSize: 15,
+          ),
+          // Overlay loading
+          if (isLoading)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.6), // Nền đen mờ
+                child: Center(
+                  child: Lottie.asset(
+                    'lib/assets/lottie/loading.json',
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    fit: BoxFit.contain,
+                    repeat: true,
+                  ),
                 ),
               ),
-              SizedBox(
-                width: 10,
-              ),
-              CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(colorEdittor),
-              ),
-            ]
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

@@ -75,6 +75,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
         _isRecording = false;
       });
       if (!context.mounted) return;
+      // ignore: use_build_context_synchronously
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => DisplayVideoScreen(videoPath: videoFile.path),

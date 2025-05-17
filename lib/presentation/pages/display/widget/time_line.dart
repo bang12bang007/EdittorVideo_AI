@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import '../../music/entities/video_segment.dart';
@@ -89,8 +88,8 @@ class _TimeLineThumbnailState extends State<TimeLineThumbnail> {
           ),
           Positioned(
             top: 0,
-            bottom: 25,
-            left: widget.width / 2 - 20,
+            bottom: 0,
+            left: 0,
             child: Container(
               width: 3,
               color: UtilColors.primaryColor,

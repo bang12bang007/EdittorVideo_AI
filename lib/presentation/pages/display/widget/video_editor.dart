@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../../assets/image.dart';
 
 class MainFunction extends StatefulWidget {
   const MainFunction({super.key});
@@ -9,11 +12,15 @@ class MainFunction extends StatefulWidget {
 
 class _MainFunctionState extends State<MainFunction> {
   final List<Map<String, String>> actions = [
-    {'icon': 'volume_mute', 'label': 'Tắt âm'},
-    {'icon': 'content_cut_sharp', 'label': 'Cắt'},
-    {'icon': 'music_note_sharp', 'label': 'Nhạc nền'},
-    {'icon': 'text_increase_rounded', 'label': 'Chữ'},
-    {'icon': 'auto_awesome_rounded', 'label': 'Hiệu ứng'}
+    {'icon': 'filter', 'label': 'Filter'},
+    {'icon': 'speed', 'label': 'Speed'},
+    {'icon': 'volume', 'label': 'Volume'},
+    {'icon': 'delete', 'label': 'Delete'},
+    {'icon': 'rm_background', 'label': 'Remove Background'},
+    {'icon': 'slipt', 'label': 'Split'},
+    {'icon': 'trim', 'label': 'Trim'},
+    {'icon': 'crop', 'label': 'Crop'},
+    {'icon': 'component', 'label': 'Canvas'},
   ];
 
   @override
@@ -26,17 +33,16 @@ class _MainFunctionState extends State<MainFunction> {
         padding: const EdgeInsets.all(12.0),
         child: Card(
           color: const Color.fromARGB(255, 0, 0, 0), // Thẻ có nền tối
-          elevation: 6,
+          elevation: 8,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 1.0),
             child: ListView(
               scrollDirection: Axis.horizontal, // Để listview cuộn ngang
               children: actions.map((action) {
                 return _buildActionButton(
-                  _getIconData(action['icon']!), // Lấy icon từ map
+                  action['icon']!,
                   action['label']!,
                 );
               }).toList(),
@@ -47,26 +53,7 @@ class _MainFunctionState extends State<MainFunction> {
     );
   }
 
-  // Hàm lấy icon từ tên icon
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'volume_mute':
-        return Icons.volume_mute;
-      case 'content_cut_sharp':
-        return Icons.content_cut_sharp;
-      case 'music_note_sharp':
-        return Icons.music_note_sharp;
-      case 'text_increase_rounded':
-        return Icons.text_increase_rounded;
-      case 'auto_awesome_rounded':
-        return Icons.auto_awesome_rounded;
-      default:
-        return Icons
-            .help_outline; // Nếu không tìm thấy thì trả về icon mặc định
-    }
-  }
-
-  Widget _buildActionButton(IconData icon, String tooltip) {
+  Widget _buildActionButton(String iconName, String tooltip) {
     return Tooltip(
       message: tooltip,
       child: InkWell(
@@ -75,14 +62,42 @@ class _MainFunctionState extends State<MainFunction> {
           // Thêm hành động khi nhấn vào nút
         },
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Icon(
-            icon,
-            size: 30,
-            color: Colors.white.withOpacity(0.9), // Màu icon sáng hơn
+          padding: const EdgeInsets.all(1.0),
+          child: SvgPicture.asset(
+            _getIconPath(iconName),
+            width: 60,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.9),
+              BlendMode.srcIn,
+            ),
           ),
         ),
       ),
     );
+  }
+
+  String _getIconPath(String iconName) {
+    switch (iconName) {
+      case 'component':
+        return ImageUtils.component;
+      case 'rm_background':
+        return ImageUtils.rmBackground;
+      case 'trim':
+        return ImageUtils.trim;
+      case 'slipt':
+        return ImageUtils.slipt;
+      case 'crop':
+        return ImageUtils.crop;
+      case 'filter':
+        return ImageUtils.filter;
+      case 'volume':
+        return ImageUtils.volume;
+      case 'speed':
+        return ImageUtils.speed;
+      case 'delete':
+        return ImageUtils.delete;
+      default:
+        return ImageUtils.circle;
+    }
   }
 }

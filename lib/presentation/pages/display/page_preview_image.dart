@@ -70,7 +70,7 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
               children: [
                 Image.file(
                   file,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                 ),
                 Row(
                   children: [

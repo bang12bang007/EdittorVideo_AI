@@ -1,37 +1,31 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
 Future<File?> restoreImage(File imageFile) async {
   try {
-    // Tạo request multipart
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://localhost:8000/restore'), // Thay đổi URL nếu cần
+      Uri.parse('http://localhost:8000/restore'),
     );
-
-    // Thêm file vào request
     request.files.add(
       await http.MultipartFile.fromPath(
-        'file', // Tên field phải khớp với API
+        'file',
         imageFile.path,
       ),
     );
     var response = await request.send();
 
     if (response.statusCode == 200) {
-      // Tạo file mới để lưu ảnh đã phục hồi
       final restoredImagePath = path.join(
         path.dirname(imageFile.path),
         'restored_${path.basename(imageFile.path)}',
       );
-
-      // Lưu response vào file
       final restoredImageFile = File(restoredImagePath);
       await restoredImageFile.writeAsBytes(
         await response.stream.toBytes(),
       );
-
       return restoredImageFile;
     } else {
       print('Lỗi: ${response.statusCode}');
@@ -42,44 +36,49 @@ Future<File?> restoreImage(File imageFile) async {
     return null;
   }
 }
-
 Future<File?> restoreVideo(File videoFile) async {
   try {
-    // Tạo request multipart
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://localhost:8000/enhance-video/'), // Thay đổi URL nếu cần
+      Uri.parse('http://localhost:8000/enhance-video/'),
     );
 
-    // Thêm file vào request
     request.files.add(
       await http.MultipartFile.fromPath(
-        'file', // Tên field phải khớp với API
+        'file',
         videoFile.path,
       ),
     );
-    var response = await request.send();
+    var response = await request.send().timeout(
+      Duration(seconds: 3000),
+      onTimeout: () {
+        throw TimeoutException('Kết nối đến server quá thời gian chờ');
+      },
+    );
 
     if (response.statusCode == 200) {
-      // Tạo file mới để lưu ảnh đã phục hồi
-      final restoredImagePath = path.join(
+      final restoredVideoPath = path.join(
         path.dirname(videoFile.path),
         'restored_${path.basename(videoFile.path)}',
       );
 
-      // Lưu response vào file
-      final restoredImageFile = File(restoredImagePath);
-      await restoredImageFile.writeAsBytes(
+      final restoredVideofile = File(restoredVideoPath);
+      await restoredVideofile.writeAsBytes(
         await response.stream.toBytes(),
       );
 
-      return restoredImageFile;
+      return restoredVideofile;
     } else {
-      print('Lỗi: ${response.statusCode}');
-      return null;
+      throw Exception('Lỗi server: ${response.statusCode}');
     }
+  } on SocketException {
+    throw Exception('Không thể kết nối đến server. Hãy kiểm tra:\n'
+        '1. Server đã được khởi động\n'
+        '2. IP của server đã chính xác\n'
+        '3. Thiết bị đang kết nối cùng mạng WiFi với server');
+  } on TimeoutException {
+    throw Exception('Kết nối đến server quá thời gian chờ');
   } catch (e) {
-    print('Lỗi khi gọi API: $e');
-    return null;
+    throw Exception('Lỗi khi xử lý video: $e');
   }
 }

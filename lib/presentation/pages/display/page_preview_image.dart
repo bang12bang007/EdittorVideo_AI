@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:edit_video_app/presentation/pages/service/service_flashAPI.dart'
     show restoreImage;
+import 'package:edit_video_app/presentation/widgets/util_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:edit_video_app/assets/colors.dart';
-import 'package:lottie/lottie.dart';
 
 class ImagePreviewPage extends StatefulWidget {
   final File file;
@@ -103,18 +103,7 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
           // Overlay loading
           if (isLoading)
             Positioned.fill(
-              child: Container(
-                color: Colors.black.withOpacity(0.6), // Nền đen mờ
-                child: Center(
-                  child: Lottie.asset(
-                    'lib/assets/lottie/loading.json',
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    fit: BoxFit.contain,
-                    repeat: true,
-                  ),
-                ),
-              ),
+              child: UtilLoading(),
             ),
         ],
       ),

@@ -161,12 +161,14 @@ class _VideoPreviewPageState extends State<VideoPreviewPage> {
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    height: 50,
-                    width: 190,
-                    color: Colors.red,
-                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [SvgPicture.asset(ImageUtils.add)],
+                      )),
                   IntrinsicWidth(
                     child: SizedBox(
                       height: 80,

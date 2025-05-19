@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:edit_video_app/presentation/pages/service/service_flashAPI.dart'
-    show restoreImage;
+    show restoreImage, restoreImageWithFineTuned;
 import 'package:edit_video_app/presentation/widgets/util_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:edit_video_app/assets/colors.dart';
@@ -87,6 +87,27 @@ class _ImagePreviewPageState extends State<ImagePreviewPage> {
                               if (restoredImage != null) {
                                 setState(() {
                                   file = restoredImage;
+                                  isRestored = true;
+                                });
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                            },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.home),
+                      onPressed: isRestored || isLoading
+                          ? null
+                          : () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              File? restoredImageFineTune =
+                                  await restoreImageWithFineTuned(widget.file);
+                              if (restoredImageFineTune != null) {
+                                setState(() {
+                                  file = restoredImageFineTune;
                                   isRestored = true;
                                 });
                               }

@@ -21,4 +21,6 @@ class ImageUtils {
   static const String delete = 'lib/assets/svg/delete.svg';
   static const String speed = 'lib/assets/svg/speed.svg';
   static const String volume = 'lib/assets/svg/volume.svg';
+  static const String add = 'lib/assets/svg/add.svg';
+  static const String volumeMute = 'lib/assets/imgs/volume_mute.png';
 }

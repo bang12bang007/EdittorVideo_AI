@@ -36,7 +36,7 @@ dependencies:
   flutter_bloc:
   hydrated_bloc:
   path_provider: ^2.0.14
-  flutter_svg: ^2.0.0
+  flutter_svg: ^2.0.9
   video_player: ^2.7.0
   video_editor: ^3.0.0
   image_picker: ^1.0.7

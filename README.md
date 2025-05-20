@@ -1,6 +1,6 @@
 # edit_video_app
 
-A new Flutter project.
+Edit Video used Flutter
 
 ## Getting Started
 
